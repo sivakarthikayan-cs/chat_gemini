@@ -102,116 +102,118 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ? Stack(
               children: [
                 SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    reverse: true,
-                    controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        ListView.separated(
-                            reverse: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              ChatResponseData? item =
-                                  homeState.homeResponse?[index];
-                              return Column(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      constraints: BoxConstraints(
-                                          maxWidth: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.6),
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: SelectableText(
-                                          item?.message ?? "",
-                                        ),
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  reverse: true,
+                  controller: _scrollController,
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      ListView.separated(
+                          reverse: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            ChatResponseData? item =
+                                homeState.homeResponse?[index];
+                            return Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Container(
+                                    constraints: BoxConstraints(
+                                        maxWidth:
+                                            MediaQuery.of(context).size.width *
+                                                0.6),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: SelectableText(
+                                        item?.message ?? "",
                                       ),
                                     ),
                                   ),
-                                  if (item?.response != null) ...[
-                                    const SizedBox(height: 10),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            constraints: BoxConstraints(
-                                                maxWidth: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.6),
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(8)),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: homeState
-                                                          .currentProcessingId ==
-                                                      item?.id
-                                                  ? TypewriterText(
-                                                      text:
-                                                          item?.response ?? "")
-                                                  : SelectableText(
-                                                      item?.response ?? ""),
-                                            ),
+                                ),
+                                if (item?.response != null) ...[
+                                  const SizedBox(height: 10),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          constraints: BoxConstraints(
+                                              maxWidth: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.6),
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: homeState
+                                                        .currentProcessingId ==
+                                                    item?.id
+                                                ? TypewriterText(
+                                                    text: item?.response ?? "")
+                                                : SelectableText(
+                                                    item?.response ?? ""),
                                           ),
-                                          IconButton(
-                                              onPressed: () {
-                                                Clipboard.setData(
-                                                  ClipboardData(
-                                                    text: item?.response ?? "",
-                                                  ),
-                                                );
-                                              },
-                                              icon: const Icon(Icons.copy_all))
-                                        ],
-                                      ),
+                                        ),
+                                        IconButton(
+                                            onPressed: () {
+                                              Clipboard.setData(
+                                                ClipboardData(
+                                                  text: item?.response ?? "",
+                                                ),
+                                              ).then((_) {
+                                                GlobalToast.showToast("Copied",
+                                                    textColor: Colors.black,
+                                                    backgroundColor:
+                                                        Colors.greenAccent);
+                                              });
+                                            },
+                                            icon: const Icon(Icons.copy_all))
+                                      ],
                                     ),
-                                  ]
-                                ],
-                              );
-                            },
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 10),
-                            itemCount: homeState.homeResponse?.length ?? 0),
-                        Visibility(
-                          visible: isLoading,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: SizedBox(
-                              width: 100,
-                              child: SpinKitThreeBounce(
-                                itemBuilder: (BuildContext context, int index) {
-                                  return DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      color: index.isEven
-                                          ? Colors.grey
-                                          : Colors.white,
-                                    ),
-                                  );
-                                },
-                              ),
+                                  ),
+                                ]
+                              ],
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 10),
+                          itemCount: homeState.homeResponse?.length ?? 0),
+                      Visibility(
+                        visible: isLoading,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: SizedBox(
+                            width: 100,
+                            child: SpinKitThreeBounce(
+                              itemBuilder: (BuildContext context, int index) {
+                                return DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: index.isEven
+                                        ? Colors.grey
+                                        : Colors.white,
+                                  ),
+                                );
+                              },
                             ),
                           ),
                         ),
-                        const SizedBox(height: 100),
-                      ],
-                    )),
+                      ),
+                      const SizedBox(height: 100),
+                    ],
+                  ),
+                ),
                 Positioned(
                   bottom: 70,
                   left: MediaQuery.of(context).size.width * 0.4,

@@ -1,5 +1,3 @@
-import 'dart:isolate';
-
 import 'package:chat_gemini/database/database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,17 +14,6 @@ class HomeNotifier extends StateNotifier<HomeState> {
   }) async {
     _page = _page + 1;
     await fetchLimitedChat(loadMore: loadMore);
-  }
-
-  Future<String> startDownloadUsingRun() async {
-    final imageData = await Isolate.run(_readAndParseJsonWithoutIsolateLogic);
-    print(imageData);
-    return imageData;
-  }
-
-  Future<String> _readAndParseJsonWithoutIsolateLogic() async {
-    await Future.delayed(const Duration(seconds: 2));
-    return 'this is downloaded data';
   }
 
   Future<void> fetchLimitedChat({bool? loadMore, bool? refresh}) async {
