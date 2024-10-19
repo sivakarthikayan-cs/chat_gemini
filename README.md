@@ -1,16 +1,18 @@
 # chat_gemini
 
-A new Flutter project.
+Chat Gemini, that enables users to engage in natural language conversations with the powerful Gemini AI model
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Examples
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<div  style="text-align: center">
+    <table>
+        <tr>
+            <td style="text-align: center">
+                <a href="https://medium.com/@sivakarthikayan.cs/chat-with-gemini-a-seamless-flutter-application-for-ai-conversations-f29ddbd58cc8">
+                    <img src="https://github.com/sivakarthikayan-cs/chat_gemini/blob/master/assets/gif/Chat_Gemini.gif" width="230" height="600"/>
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
