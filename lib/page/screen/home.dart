@@ -240,23 +240,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           : Align(
               alignment: Alignment.center,
               child: Center(
-                  child: Image.asset(
-                "assets/image/ic_gemini.png",
-                scale: 5,
-              )
-                      .animate(
-                        onPlay: (controller) => controller.repeat(),
-                      )
-                      .rotate(duration: 3000.ms)
-                      .flip(
-                          begin: 2,
-                          duration: 3000.ms,
-                          direction: Axis.horizontal)
-                      .flip(
-                        begin: 2,
-                        duration: 3000.ms,
-                        direction: Axis.vertical,
-                      )),
+                child: Image.asset(
+                  "assets/image/ic_gemini.png",
+                  scale: 5,
+                )
+                    .animate(
+                      onPlay: (controller) => controller.repeat(),
+                    )
+                    .rotate(begin: 0.5, duration: 3000.ms)
+                    .flip(
+                        begin: 2, duration: 3000.ms, direction: Axis.horizontal)
+                    .flip(
+                      begin: 2,
+                      duration: 3000.ms,
+                      direction: Axis.vertical,
+                    ),
+              ),
             ),
       bottomSheet: SafeArea(
         child: Container(
@@ -313,7 +312,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
       if (resID != null) {
         try {
-          String? res = await getChat(prompt: prompt!);
+          String? res = await getChat(null, prompt: prompt!);
           setState(() {
             prompt = null;
             isLoading = false;
