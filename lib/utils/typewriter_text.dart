@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:chat_gemini/page/provider/home_provider.dart';
+import 'package:chat_gemini/page/provider/home/home_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:chat_gemini/database/database.dart';
-import 'package:chat_gemini/page/provider/home_provider.dart';
-import 'package:chat_gemini/page/provider/state/home_state.dart';
+import 'package:chat_gemini/page/provider/home/home_provider.dart';
+import 'package:chat_gemini/page/provider/home/state/home_state.dart';
+import 'package:chat_gemini/page/provider/speech/speech_provider.dart';
+import 'package:chat_gemini/page/provider/speech/state/speech_state.dart';
 import 'package:chat_gemini/utils/flutter_toast.dart';
 import 'package:chat_gemini/utils/google_chat.dart';
 import 'package:chat_gemini/utils/typewriter_text.dart';
-import 'package:drift/drift.dart' as drift;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -77,6 +78,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   HomeState get homeState => ref.watch(homeStateNotifierProvider);
+  SpeechState get speechState => ref.watch(speechStateNotifierProvider);
 
   @override
   Widget build(BuildContext context) {
@@ -165,20 +167,64 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                     item?.response ?? ""),
                                           ),
                                         ),
-                                        IconButton(
-                                            onPressed: () {
-                                              Clipboard.setData(
-                                                ClipboardData(
-                                                  text: item?.response ?? "",
-                                                ),
-                                              ).then((_) {
-                                                GlobalToast.showToast("Copied",
-                                                    textColor: Colors.black,
-                                                    backgroundColor:
-                                                        Colors.greenAccent);
-                                              });
-                                            },
-                                            icon: const Icon(Icons.copy_all))
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                                onPressed: () async {
+                                                  if (speechState.currentState?[
+                                                          item?.id] ==
+                                                      SpeechStateConcreteState
+                                                          .playing) {
+                                                    await ref
+                                                        .read(
+                                                            speechStateNotifierProvider
+                                                                .notifier)
+                                                        .pause();
+                                                  } else {
+                                                    await ref
+                                                        .read(
+                                                            speechStateNotifierProvider
+                                                                .notifier)
+                                                        .speak(
+                                                            msg: item?.response,
+                                                            itemId: item?.id);
+                                                  }
+                                                },
+                                                icon: Icon(speechState
+                                                                .currentState?[
+                                                            item?.id] ==
+                                                        SpeechStateConcreteState
+                                                            .playing
+                                                    ? Icons.pause
+                                                    : Icons.play_arrow)),
+                                            IconButton(
+                                                onPressed: () async {
+                                                  await ref
+                                                      .read(
+                                                          speechStateNotifierProvider
+                                                              .notifier)
+                                                      .stop();
+                                                },
+                                                icon: const Icon(Icons.stop)),
+                                            IconButton(
+                                                onPressed: () {
+                                                  Clipboard.setData(
+                                                    ClipboardData(
+                                                      text:
+                                                          item?.response ?? "",
+                                                    ),
+                                                  ).then((_) {
+                                                    GlobalToast.showToast(
+                                                        "Copied",
+                                                        textColor: Colors.black,
+                                                        backgroundColor:
+                                                            Colors.greenAccent);
+                                                  });
+                                                },
+                                                icon:
+                                                    const Icon(Icons.copy_all)),
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ),
@@ -296,6 +342,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> onSubmit() async {
+    // Navigator.of(context)
+    //     .push(MaterialPageRoute(builder: (context) => TextToSpeech()));
+    //
     if (promptController.text.isNotEmpty) {
       setState(() {
         prompt = promptController.text;
@@ -304,15 +353,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       });
       final int? resID = await ref
           .read(homeStateNotifierProvider.notifier)
-          .addChat(
-              chatResponseCompanion:
-                  ChatResponseCompanion(message: drift.Value(prompt!)));
+          .addChat(prompt: prompt!);
       if ((homeState.homeResponse?.length ?? 0) > 2) {
         _scrollToDown();
       }
       if (resID != null) {
         try {
-          String? res = await getChat(null, prompt: prompt!);
+          String? res = await getChat(prompt: prompt!);
           setState(() {
             prompt = null;
             isLoading = false;

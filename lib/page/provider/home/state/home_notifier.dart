@@ -1,4 +1,5 @@
 import 'package:chat_gemini/database/database.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'home_state.dart';
@@ -65,11 +66,11 @@ class HomeNotifier extends StateNotifier<HomeState> {
   }
 
   Future<int?> addChat(
-      {required ChatResponseCompanion chatResponseCompanion}) async {
+      {required String prompt}) async {
     int? res;
     state = state.copyWith(state: HomeStateConcreteState.loading);
     try {
-      res = await db.chatResponseDao.addChatResponse(chatResponseCompanion);
+      res = await db.chatResponseDao.addChatResponse(ChatResponseCompanion(message: Value(prompt)));
       await fetchLimitedChat(refresh: true);
       state = state.copyWith(
           state: HomeStateConcreteState.success, currentProcessingId: res);
