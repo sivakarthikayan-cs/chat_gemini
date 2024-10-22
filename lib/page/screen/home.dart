@@ -197,15 +197,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                                             .playing
                                                     ? Icons.pause
                                                     : Icons.play_arrow)),
-                                            IconButton(
-                                                onPressed: () async {
-                                                  await ref
-                                                      .read(
-                                                          speechStateNotifierProvider
-                                                              .notifier)
-                                                      .stop();
-                                                },
-                                                icon: const Icon(Icons.stop)),
+                                            if (speechState
+                                                    .currentState?[item?.id] ==
+                                                SpeechStateConcreteState
+                                                    .playing)
+                                              IconButton(
+                                                  onPressed: () async {
+                                                    await ref
+                                                        .read(
+                                                            speechStateNotifierProvider
+                                                                .notifier)
+                                                        .stop();
+                                                  },
+                                                  icon: const Icon(Icons.stop)),
                                             IconButton(
                                                 onPressed: () {
                                                   Clipboard.setData(
@@ -332,7 +336,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 IconButton(
                     iconSize: 40,
                     onPressed: () async => await onSubmit(),
-                    icon: const Icon(CupertinoIcons.arrow_right_circle_fill))
+                    icon: const Icon(CupertinoIcons.arrow_right_circle_fill)),
               ],
             ),
           ),
