@@ -346,9 +346,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> onSubmit() async {
-    // Navigator.of(context)
-    //     .push(MaterialPageRoute(builder: (context) => TextToSpeech()));
-    //
     if (promptController.text.isNotEmpty) {
       setState(() {
         prompt = promptController.text;
