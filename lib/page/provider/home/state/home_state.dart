@@ -49,5 +49,12 @@ class HomeState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [homeResponse, state];
+  List<Object?> get props => [
+        homeResponse,
+        state,
+        currentProcessingId,
+        showMoreLoad,
+        totalChatCount,
+        refreshLoad
+      ];
 }

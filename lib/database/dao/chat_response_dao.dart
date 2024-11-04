@@ -44,13 +44,10 @@ class ChatResponseDao extends DatabaseAccessor<AppDatabase>
 
   // get the total chat count
   Future<int> getTotalChatCount() async {
-    final countQuery = chatResponse.id.count();
-
     final result = await customSelect(
       'SELECT COUNT(*) AS total FROM chat_response',
       readsFrom: {chatResponse},
     ).getSingle();
-
     return result.data['total'] as int;
   }
 

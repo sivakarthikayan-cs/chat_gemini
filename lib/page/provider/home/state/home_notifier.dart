@@ -83,7 +83,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
   Future<void> deleteAllChat() async {
     state = state.copyWith(state: HomeStateConcreteState.loading);
     try {
-      int res = await db.chatResponseDao.clearTable();
+    await db.chatResponseDao.clearTable();
       await fetchLimitedChat(refresh: true);
       state = state.copyWith(state: HomeStateConcreteState.success);
     } catch (e) {
@@ -95,7 +95,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
       {required int id, String? response, String? updateDate}) async {
     state = state.copyWith(state: HomeStateConcreteState.loading);
     try {
-      int res = await db.chatResponseDao.updateChatResponseRecord(
+       await db.chatResponseDao.updateChatResponseRecord(
           id: id, response: response, updateDate: updateDate);
       await fetchLimitedChat(refresh: true);
       state = state.copyWith(state: HomeStateConcreteState.success);
